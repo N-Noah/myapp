@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}ツイッター{% endblock %}
+        <!-- Page Header-->
+         {% block header %}
+        <header class="masthead" style="background-image: url({% static 'assets/img/post-bg.jpg' %})">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>{{object.title}}</h1>
+                            <h2 class="subheading">{{object.content|truncatechars:30}}</h2>
+                            <span class="meta">
+                                <a href="{% url 'sitesystem:index' %}">ツイッター</a>
+                                {{object.posted_at}}に投稿／カテゴリ:
+                                {{object.category}}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% endblock %}
+        <!-- Post Content-->
+         {% block contents %}
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p>{{object.content}}</p>
+                    </div>
+                </div>
+            </div>
+        </article>
+
+        <hr>
+        
+        <h3 class="comment-title">コメント</h3>
+
+        {% for comment in object.comment_set.all %}
+        <div class="comment-list">
+            <div class="border-bottom">{{ comment.user_name }} {{ comment.created_at }}</div>
+            <div class="mt-2">{{ comment.message | linebreaks | urlize }}</div>
+        </div>
+        {% empty %}
+        <p>コメントはありません</p>
+        <button type="submit" class="btn btn-success col-3 offset-2"><a href="{% url 'sitesystem:comment_form' post.pk %}">投稿する</a></button>
+        {% endfor %}
+
+        {% endblock %}
